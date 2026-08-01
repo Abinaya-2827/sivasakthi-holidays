@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Payment — {{ SITE_NAME }}{% endblock %}
+{% block content %}
+
+<section class="section-py">
+    <div class="container">
+        <div class="text-center mb-5">
+            <div class="section-eyebrow">Secure Payment</div>
+            <h2 class="section-title">Pay via UPI</h2>
+            <p class="section-subtitle">Everything you need to complete your payment, in one place</p>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-7 col-xl-6">
+
+                <!-- Payment Details -->
+                <div class="payment-details-card mb-4" data-aos="fade-up">
+                    <h5 class="mb-4 text-center">Payment Details</h5>
+
+                    <div class="payment-detail-row">
+                        <span class="payment-detail-label"><i class="bi bi-qr-code-scan me-2"></i>UPI ID</span>
+                        <span class="upi-id">{{ SITE_UPI_ID }}</span>
+                    </div>
+
+                    <div class="payment-detail-row">
+                        <span class="payment-detail-label"><i class="bi bi-telephone me-2"></i>Phone Number</span>
+                        <span class="payment-detail-value">{{ SITE_PHONE }}</span>
+                    </div>
+
+                    <p class="text-muted small text-center mt-3 mb-0">
+                        Add this UPI ID in Google Pay / PhonePe / Paytm to pay directly — no QR scan needed.
+                    </p>
+                </div>
+
+                <!-- Booking Instructions -->
+                <div class="payment-details-card mb-4" data-aos="fade-up" data-aos-delay="60">
+                    <h5 class="mb-3 text-center">Booking Instructions</h5>
+                    <ol class="payment-steps mb-0">
+                        <li>Pay your package amount to the UPI ID above.</li>
+                        <li>Upload a screenshot of the payment using the form below.</li>
+                        <li>Our team verifies it and confirms your booking by phone or WhatsApp.</li>
+                    </ol>
+                </div>
+
+                <!-- Payment Confirmation message -->
+                <div class="payment-confirmation-note mb-4" data-aos="fade-up" data-aos-delay="90">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    Once we verify your payment, you'll receive a confirmation call or WhatsApp message with your booking details. No need to call unless it's been more than a few hours.
+                </div>
+
+                <!-- Payment proof upload -->
+                <div class="payment-details-card" data-aos="fade-up" data-aos-delay="120">
+                    <h5 class="mb-2 text-center">After Payment</h5>
+                    <p class="text-muted small text-center mb-4">Please upload a screenshot of your payment so we can confirm your booking.</p>
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">Name</label>
+                            {{ form.name }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Phone</label>
+                            {{ form.phone }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Note (package / trip date)</label>
+                            {{ form.note }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Payment Screenshot</label>
+                            {{ form.screenshot }}
+                        </div>
+                        <button type="submit" class="btn btn-orange w-100">Submit Payment Proof</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

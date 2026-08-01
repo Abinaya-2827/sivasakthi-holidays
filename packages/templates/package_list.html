@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+{% block title %}Tour Packages — {{ SITE_NAME }}{% endblock %}
+{% block content %}
+
+<section class="section-py">
+    <div class="container">
+        <div class="text-center mb-4">
+            <div class="section-eyebrow">Choose Your Trip</div>
+            <h2 class="section-title">Tour Packages</h2>
+            <p class="section-subtitle">A package for every occasion</p>
+        </div>
+
+        <div class="d-flex flex-wrap justify-content-center gap-2 mb-5">
+            <a href="{% url 'package_list' %}" class="btn btn-sm {% if not selected_type %}btn-orange{% else %}btn-outline-navy{% endif %}">All</a>
+            {% for value, label in tour_types %}
+            <a href="?type={{ value|urlencode }}" class="btn btn-sm {% if selected_type == value %}btn-orange{% else %}btn-outline-navy{% endif %}">{{ label }}</a>
+            {% endfor %}
+        </div>
+
+        <div class="row g-4">
+            {% for p in packages %}
+            <div class="col-12 col-md-6 col-lg-4 pkg-col" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:'30' }}">
+                <div class="pkg-card">
+                    <div class="pkg-card-media">
+                        <img src="{{ p.image.url }}" alt="{{ p.tour_type }}" loading="lazy">
+                        <span class="pkg-card-badge"><i class="bi {{ p.icon }}"></i>{{ p.tour_type }}</span>
+                    </div>
+                    <div class="pkg-card-body">
+                        <h3 class="pkg-card-title">{{ p.destination_text }}</h3>
+                        <p class="pkg-card-desc">{{ p.description }}</p>
+
+                        <div class="pkg-card-meta">
+                            <span><i class="bi bi-clock"></i>{{ p.duration }}</span>
+                            <span class="pkg-card-contact"><i class="bi bi-telephone"></i>Contact Owner for Best Price</span>
+                        </div>
+
+                        {% if p.popular_destinations_list %}
+                        <div class="pkg-card-tags">
+                            {% for d in p.popular_destinations_list %}
+                            <span class="pkg-tag">{{ d }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                        <div class="pkg-card-actions">
+                            <button type="button" class="btn btn-outline-navy btn-sm flex-fill"
+                                    data-bs-toggle="modal" data-bs-target="#pkgDetailModal"
+                                    data-pkg-index="{{ forloop.counter0 }}">
+                                View Details
+                            </button>
+                            <a href="https://wa.me/{{ SITE_WHATSAPP }}?text={{ p.whatsapp_message|urlencode }}"
+                               target="_blank" rel="noopener" class="btn btn-orange btn-sm flex-fill">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center text-muted py-5">No packages available right now — add them from the admin panel.</div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Package details modal (client-side only — no extra page/view needed) -->
+<div class="modal fade" id="pkgDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content pkg-modal-content">
+            <button type="button" class="btn-close lightbox-close pkg-modal-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <img src="" alt="" id="pkgModalImage" class="pkg-modal-image">
+            <div class="pkg-modal-body">
+                <span class="pkg-card-badge pkg-modal-badge" id="pkgModalType"></span>
+                <h3 id="pkgModalTitle" class="mt-2"></h3>
+                <p id="pkgModalDesc" class="text-muted"></p>
+                <div class="pkg-card-meta mb-3">
+                    <span><i class="bi bi-clock"></i><span id="pkgModalDuration"></span></span>
+                </div>
+                <div class="pkg-card-tags mb-3" id="pkgModalTags"></div>
+                <h6>What's Included</h6>
+                <ul class="pkg-modal-facilities" id="pkgModalFacilities"></ul>
+
+                <div class="pkg-contact-box mb-3">
+                    <p class="pkg-contact-heading"><i class="bi bi-telephone-fill"></i> Contact Owner for Package Details &amp; Pricing</p>
+                    <p class="mb-1"><i class="bi bi-whatsapp"></i> WhatsApp: <a href="https://wa.me/{{ SITE_WHATSAPP }}" target="_blank" rel="noopener">{{ SITE_PHONE }}</a></p>
+                    <p class="mb-1"><i class="bi bi-qr-code"></i> UPI: {{ SITE_UPI_ID }}</p>
+                    <p class="mb-0"><i class="bi bi-geo-alt"></i> {{ SITE_ADDRESS }}</p>
+                </div>
+
+                <a href="#" target="_blank" rel="noopener" class="btn btn-orange w-100" id="pkgModalBookBtn">Book Now</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const modal = document.getElementById("pkgDetailModal");
+    if (!modal) return;
+
+    const packages = [
+        {% for p in packages %}
+        {
+            type: "{{ p.tour_type|escapejs }}",
+            title: "{{ p.destination_text|escapejs }}",
+            desc: "{{ p.description|escapejs }}",
+            image: "{{ p.image.url|escapejs }}",
+            duration: "{{ p.duration|escapejs }}",
+            tags: [{% for d in p.popular_destinations_list %}"{{ d|escapejs }}"{% if not forloop.last %}, {% endif %}{% endfor %}],
+            facilities: [{% for f in p.facilities_list %}"{{ f|escapejs }}"{% if not forloop.last %}, {% endif %}{% endfor %}],
+            whatsapp: "https://wa.me/{{ SITE_WHATSAPP }}?text={{ p.whatsapp_message|urlencode }}"
+        }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ];
+
+    modal.addEventListener("show.bs.modal", function (event) {
+        const trigger = event.relatedTarget;
+        const pkg = packages[parseInt(trigger.getAttribute("data-pkg-index"), 10) || 0];
+        if (!pkg) return;
+
+        document.getElementById("pkgModalImage").src = pkg.image;
+        document.getElementById("pkgModalType").textContent = pkg.type;
+        document.getElementById("pkgModalTitle").textContent = pkg.title;
+        document.getElementById("pkgModalDesc").textContent = pkg.desc;
+        document.getElementById("pkgModalDuration").textContent = pkg.duration;
+        document.getElementById("pkgModalBookBtn").href = pkg.whatsapp;
+
+        const tagsEl = document.getElementById("pkgModalTags");
+        tagsEl.innerHTML = "";
+        pkg.tags.forEach(function (tag) {
+            const span = document.createElement("span");
+            span.className = "pkg-tag";
+            span.textContent = tag;
+            tagsEl.appendChild(span);
+        });
+
+        const listEl = document.getElementById("pkgModalFacilities");
+        listEl.innerHTML = "";
+        pkg.facilities.forEach(function (f) {
+            const li = document.createElement("li");
+            li.innerHTML = '<i class="bi bi-check2"></i> ' + f;
+            listEl.appendChild(li);
+        });
+    });
+});
+</script>
+{% endblock %}

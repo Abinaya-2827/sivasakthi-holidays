@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% block title %}Gallery — {{ SITE_NAME }}{% endblock %}
+{% block content %}
+
+<section class="section-py">
+    <div class="container">
+        <div class="text-center mb-5">
+            <div class="section-eyebrow">Memories</div>
+            <h2 class="section-title">Trip Gallery</h2>
+            <p class="section-subtitle">Real photos from our travellers' journeys</p>
+        </div>
+
+        {% if albums %}
+        <div class="row g-4 album-grid">
+            {% for album in albums %}
+            <div class="col-12 col-md-6 col-lg-4 gallery-col" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:'30' }}">
+                <div class="album-card">
+                    <div class="album-card-media">
+                        <img src="{{ album.cover.image.url }}" alt="{{ album.name }}" loading="lazy">
+                        <span class="album-card-count">{{ album.count }} Photo{{ album.count|pluralize }}</span>
+                    </div>
+                    <div class="album-card-body">
+                        <h3 class="album-card-title">{{ album.name }}</h3>
+                        <p class="album-card-desc">{{ album.description }}</p>
+                        <button type="button"
+                                class="btn btn-orange btn-sm w-100 album-card-btn"
+                                data-bs-toggle="modal"
+                                data-bs-target="#galleryLightbox"
+                                data-album-index="{{ forloop.counter0 }}">
+                            View Gallery
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center text-muted py-5">No photos yet — add them from the admin panel.</div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Album viewer modal (carousel through that album's photos) -->
+<div class="modal fade" id="galleryLightbox" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content lightbox-content">
+            <button type="button" class="btn-close btn-close-white lightbox-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button type="button" class="lightbox-nav prev" id="lightboxPrev" aria-label="Previous photo">&#10094;</button>
+            <button type="button" class="lightbox-nav next" id="lightboxNext" aria-label="Next photo">&#10095;</button>
+            <img src="" alt="" id="lightboxImage" class="lightbox-image">
+            <p id="lightboxCaption" class="lightbox-caption"></p>
+            <p id="lightboxCounter" class="lightbox-counter"></p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const lightbox = document.getElementById("galleryLightbox");
+    if (!lightbox) return;
+
+    // Each album's photo URLs + name, built server-side once, read client-side.
+    const albums = [
+        {% for album in albums %}
+        {
+            name: "{{ album.name|escapejs }}",
+            photos: [
+                {% for photo in album.photos %}"{{ photo.image.url|escapejs }}"{% if not forloop.last %}, {% endif %}{% endfor %}
+            ]
+        }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ];
+
+    let currentAlbum = 0;
+    let currentPhoto = 0;
+
+    function show() {
+        const album = albums[currentAlbum];
+        if (!album) return;
+        document.getElementById("lightboxImage").src = album.photos[currentPhoto];
+        document.getElementById("lightboxCaption").textContent = album.name;
+        document.getElementById("lightboxCounter").textContent =
+            album.photos.length > 1 ? `Photo ${currentPhoto + 1} of ${album.photos.length}` : "";
+        const multi = album.photos.length > 1;
+        document.getElementById("lightboxPrev").style.display = multi ? "flex" : "none";
+        document.getElementById("lightboxNext").style.display = multi ? "flex" : "none";
+    }
+
+    lightbox.addEventListener("show.bs.modal", function (event) {
+        const trigger = event.relatedTarget;
+        currentAlbum = parseInt(trigger.getAttribute("data-album-index"), 10) || 0;
+        currentPhoto = 0;
+        show();
+    });
+
+    document.getElementById("lightboxPrev").addEventListener("click", function () {
+        const total = albums[currentAlbum].photos.length;
+        currentPhoto = (currentPhoto - 1 + total) % total;
+        show();
+    });
+    document.getElementById("lightboxNext").addEventListener("click", function () {
+        const total = albums[currentAlbum].photos.length;
+        currentPhoto = (currentPhoto + 1) % total;
+        show();
+    });
+
+    // Left/Right arrow keys navigate while the lightbox is open.
+    // (Escape-to-close is already handled by Bootstrap's modal default.)
+    lightbox.addEventListener("keydown", function (event) {
+        const total = albums[currentAlbum] ? albums[currentAlbum].photos.length : 0;
+        if (total <= 1) return;
+        if (event.key === "ArrowLeft") {
+            currentPhoto = (currentPhoto - 1 + total) % total;
+            show();
+        } else if (event.key === "ArrowRight") {
+            currentPhoto = (currentPhoto + 1) % total;
+            show();
+        }
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}About Us — {{ SITE_NAME }}{% endblock %}
+{% block content %}
+
+<section class="hero-slide d-flex align-items-center" style="height:40vh; min-height:280px; background-image:url('{% static 'images/hero-placeholder.jpg' %}');">
+    <div class="container hero-caption text-center">
+        <h1>About Sivasakthi Holidays</h1>
+        <p class="mx-auto">Madurai's trusted travel partner, on every kind of journey.</p>
+    </div>
+</section>
+
+<section class="section-py">
+    <div class="container">
+        <div class="row align-items-center gy-4 mb-5">
+            <div class="col-lg-6" data-aos="fade-right">
+                <div class="section-eyebrow">Who We Are</div>
+                <h2 class="section-title">A Trusted Travel Agency, Built on Trust</h2>
+                <p class="text-muted">Sivasakthi Holidays is a Madurai-based travel agency dedicated to making every journey safe, comfortable, and memorable. Whether it's a weekend family getaway, a college excursion, a corporate offsite, or a sacred temple tour, we bring the same care and attention to every trip we plan.</p>
+                <p class="text-muted">Our fleet of comfortable buses and team of experienced drivers have carried thousands of happy travellers across Tamil Nadu, Kerala, Karnataka, and beyond — always with safety and comfort as our first priority.</p>
+            </div>
+            <div class="col-lg-6" data-aos="fade-left">
+                <img src="{% static 'images/bus-placeholder.jpg' %}" class="img-fluid rounded-4 shadow" alt="Our bus">
+            </div>
+        </div>
+
+        <div class="row g-4">
+            {% for icon, title, desc in about_points %}
+            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:'50' }}">
+                <div class="why-card text-start">
+                    <i class="bi {{ icon }}"></i>
+                    <h5>{{ title }}</h5>
+                    <p class="text-muted mb-0 small">{{ desc }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="section-py bg-mist">
+    <div class="container text-center">
+        <div class="cta-section" style="background:linear-gradient(120deg, var(--orange) 0%, var(--orange-dark) 100%);" data-aos="zoom-in">
+            <h2 class="mb-3">Let's Plan Your Next Journey Together</h2>
+            <a href="https://wa.me/{{ SITE_WHATSAPP }}?text=Hello%20Sivasakthi%20Holidays%2C%20I%20would%20like%20to%20know%20more%20about%20your%20tours." target="_blank" rel="noopener" class="btn btn-navy btn-lg px-5">
+                <i class="bi bi-whatsapp me-2"></i>Talk to Us
+            </a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

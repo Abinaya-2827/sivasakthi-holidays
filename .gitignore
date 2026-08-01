@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+venv/
+.venv/
+.env
+db.sqlite3
+/media/
+/staticfiles/
+*.log
+.vscode/
+media_imports/*
+!media_imports/*/.gitkeep

@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% block title %}Contact Us — {{ SITE_NAME }}{% endblock %}
+{% block content %}
+
+<section class="section-py">
+    <div class="container">
+        <div class="text-center mb-5">
+            <div class="section-eyebrow">Get In Touch</div>
+            <h2 class="section-title">Contact Us</h2>
+            <p class="section-subtitle">We'd love to help plan your next trip</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-5" data-aos="fade-right">
+                <div class="card-hover card-body-sh p-4 h-100">
+                    <h5 class="mb-4">Reach Us Directly</h5>
+                    <p class="mb-3"><i class="bi bi-geo-alt text-orange me-2" style="color:var(--orange);"></i>{{ SITE_ADDRESS }}</p>
+                    <p class="mb-3"><i class="bi bi-telephone me-2" style="color:var(--orange);"></i><a href="tel:+91{{ SITE_PHONE }}">{{ SITE_PHONE }}</a></p>
+                    <p class="mb-3"><i class="bi bi-whatsapp me-2" style="color:var(--orange);"></i><a href="https://wa.me/{{ SITE_WHATSAPP }}" target="_blank" rel="noopener">{{ SITE_PHONE }}</a></p>
+                    <p class="mb-3"><i class="bi bi-instagram me-2" style="color:var(--orange);"></i><a href="{{ SITE_INSTAGRAM }}" target="_blank" rel="noopener">@sivasakthi_tours_madurai</a></p>
+                    <p class="mb-4"><i class="bi bi-envelope me-2" style="color:var(--orange);"></i><a href="mailto:{{ SITE_EMAIL }}">{{ SITE_EMAIL }}</a></p>
+
+                    <div class="ratio ratio-4x3 rounded-3 overflow-hidden bg-light d-flex align-items-center justify-content-center text-muted">
+                        <span>Google Map placeholder — add embed code here</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-7" data-aos="fade-left">
+                <div class="card-hover card-body-sh p-4">
+                    <h5 class="mb-4">Send Us a Message</h5>
+                    <form method="POST" id="contactForm" novalidate>
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Name</label>
+                                {{ form.name }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Phone</label>
+                                {{ form.phone }}
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Email</label>
+                                {{ form.email }}
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Message</label>
+                                {{ form.message }}
+                            </div>
+                            <div class="col-12">
+                                <div id="contactFormError" class="text-danger small mb-2 d-none"></div>
+                                <button type="submit" class="btn btn-orange px-4">Send Message</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("contactForm");
+    if (!form) return;
+
+    // wa.me format: country code + number, no + / spaces / dashes.
+    const WHATSAPP_NUMBER = "916383080181"; // +91 6383080181
+    const errorBox = document.getElementById("contactFormError");
+
+    function showError(msg, field) {
+        errorBox.textContent = msg;
+        errorBox.classList.remove("d-none");
+        if (field) field.focus();
+    }
+
+    function clearError() {
+        errorBox.textContent = "";
+        errorBox.classList.add("d-none");
+    }
+
+    function isValidEmail(value) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    }
+
+    form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        clearError();
+
+        const nameField = document.getElementById("id_name");
+        const phoneField = document.getElementById("id_phone");
+        const emailField = document.getElementById("id_email");
+        const messageField = document.getElementById("id_message");
+
+        const name = (nameField.value || "").trim();
+        const phone = (phoneField.value || "").trim();
+        const email = (emailField.value || "").trim();
+        const message = (messageField.value || "").trim();
+
+        if (!name) { showError("Please enter your name.", nameField); return; }
+        if (!phone) { showError("Please enter your phone number.", phoneField); return; }
+        if (!email) { showError("Please enter your email address.", emailField); return; }
+        if (!isValidEmail(email)) { showError("Please enter a valid email address.", emailField); return; }
+        if (!message) { showError("Please enter your message.", messageField); return; }
+
+        const waMessage =
+            "Hello Sivasakthi Holidays,\n\n" +
+            "I would like to contact you.\n\n" +
+            "Name: " + name + "\n" +
+            "Phone: " + phone + "\n" +
+            "Email: " + email + "\n\n" +
+            "Message:\n" + message + "\n\n" +
+            "Thank you.";
+
+        const waUrl = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(waMessage);
+
+        // Best-effort background save so these enquiries still show up in
+        // the admin panel like before — doesn't block or delay WhatsApp.
+        try {
+            fetch(form.action || window.location.href, {
+                method: "POST",
+                body: new FormData(form),
+                headers: { "X-Requested-With": "XMLHttpRequest" },
+            }).catch(function () {});
+        } catch (e) { /* WhatsApp redirect below is the primary action */ }
+
+        window.open(waUrl, "_blank", "noopener");
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ SITE_NAME }} — Madurai's Trusted Travel Agency{% endblock %}
+
+{% block content %}
+
+<!-- Hero Slider -->
+<div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        {% for slide in hero_slides %}
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %}active{% endif %}"></button>
+        {% endfor %}
+    </div>
+    <div class="carousel-inner">
+        {% for slide in hero_slides %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            <div class="hero-slide d-flex align-items-end" style="background-image:url('{{ slide.image.url }}');">
+                <div class="container hero-caption pb-5">
+                    <h1 class="mb-3" data-aos="fade-up">{{ slide.title }}</h1>
+                    <p data-aos="fade-up" data-aos-delay="100">{{ slide.subtitle }}</p>
+                    <a href="{% url 'destination_list' %}" class="btn btn-orange btn-lg mt-3 px-4" data-aos="fade-up" data-aos-delay="200">Explore Destinations</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="carousel-item active">
+            <div class="hero-slide d-flex align-items-end" style="background-image:url('{% static 'images/hero-placeholder.jpg' %}');">
+                <div class="container hero-caption pb-5">
+                    <h1 class="mb-3">Your Journey, Our Promise</h1>
+                    <p>Premium bus travel and holiday packages across South India.</p>
+                    <a href="{% url 'destination_list' %}" class="btn btn-orange btn-lg mt-3 px-4">Explore Destinations</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+    </button>
+</div>
+
+<!-- Welcome Section -->
+<section class="section-py">
+    <div class="container">
+        <div class="row align-items-center gy-4">
+            <div class="col-lg-6" data-aos="fade-right">
+                <img src="{% static 'images/bus-placeholder.jpg' %}" class="img-fluid rounded-4 shadow" alt="Sivasakthi Holidays bus">
+            </div>
+            <div class="col-lg-6" data-aos="fade-left">
+                <div class="section-eyebrow">Welcome to Sivasakthi Holidays</div>
+                <h2 class="section-title">Madurai's Trusted Name in Travel</h2>
+                <p class="text-muted">For years, Sivasakthi Holidays has been helping families, colleges, corporates, and pilgrims travel safely and comfortably across South India. From temple tours to honeymoon getaways, we plan every trip with care — comfortable buses, experienced drivers, and routes we know inside out.</p>
+                <a href="{% url 'about' %}" class="btn btn-outline-navy px-4">Learn More About Us</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Why Choose Us -->
+<section class="section-py bg-mist">
+    <div class="container text-center">
+        <div class="section-eyebrow">Why Sivasakthi Holidays</div>
+        <h2 class="section-title">Why Choose Us</h2>
+        <p class="section-subtitle">What makes every trip with us different</p>
+        <div class="row g-4">
+            {% for item in why_choose_us %}
+            <div class="col-md-4 col-lg-3" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:'50' }}">
+                <div class="why-card">
+                    <i class="bi {{ item.icon }}"></i>
+                    <h5>{{ item.title }}</h5>
+                    <p class="text-muted mb-0 small">{{ item.description }}</p>
+                </div>
+            </div>
+            {% empty %}
+            {% for icon, title, desc in default_why_choose_us %}
+            <div class="col-md-4 col-lg-3" data-aos="fade-up">
+                <div class="why-card">
+                    <i class="bi {{ icon }}"></i>
+                    <h5>{{ title }}</h5>
+                    <p class="text-muted mb-0 small">{{ desc }}</p>
+                </div>
+            </div>
+            {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Popular Destinations -->
+<section class="section-py">
+    <div class="container">
+        <div class="text-center">
+            <div class="section-eyebrow">Where To Next</div>
+            <h2 class="section-title">Popular Destinations</h2>
+            <p class="section-subtitle">Hand-picked routes our travellers love</p>
+        </div>
+        <div class="row g-4">
+            {% for d in popular_destinations %}
+            <div class="col-sm-6 col-lg-3" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:'50' }}">
+                <div class="card card-hover h-100">
+                    <img src="{{ d.image.url }}" alt="{{ d.name }}">
+                    <div class="card-body-sh">
+                        <h5>{{ d.name }}</h5>
+                        <p class="text-muted small mb-3">{{ d.short_description }}</p>
+                        <a href="https://wa.me/{{ SITE_WHATSAPP }}?text={{ d.whatsapp_message|urlencode }}" target="_blank" rel="noopener" class="btn btn-orange btn-sm w-100">Book Now</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center text-muted">Destinations coming soon — add them from the admin panel.</div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'destination_list' %}" class="btn btn-outline-navy px-4">View All Destinations</a>
+        </div>
+    </div>
+</section>
+
+<!-- Gallery Preview -->
+<section class="section-py bg-mist">
+    <div class="container">
+        <div class="text-center">
+            <div class="section-eyebrow">Moments We've Shared</div>
+            <h2 class="section-title">Customer Gallery</h2>
+            <p class="section-subtitle">Real trips, real smiles</p>
+        </div>
+        <div class="row g-3">
+            {% for img in gallery_preview %}
+            <div class="col-6 col-lg-3" data-aos="zoom-in">
+                <div class="gallery-item">
+                    <img src="{{ img.image.url }}" alt="{{ img.caption }}">
+                    <div class="gallery-overlay">{{ img.caption }}</div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center text-muted">Gallery photos coming soon.</div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'gallery' %}" class="btn btn-outline-navy px-4">View Full Gallery</a>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials -->
+<section class="section-py">
+    <div class="container">
+        <div class="text-center">
+            <div class="section-eyebrow">Happy Travellers</div>
+            <h2 class="section-title">What Our Customers Say</h2>
+        </div>
+        <div class="row g-4">
+            {% for t in testimonials %}
+            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:'50' }}">
+                <div class="testimonial-card">
+                    <div class="mb-2">
+                        {% for i in "12345" %}
+                        <i class="bi {% if forloop.counter <= t.rating %}bi-star-fill{% else %}bi-star{% endif %}"></i>
+                        {% endfor %}
+                    </div>
+                    <p class="text-muted">"{{ t.message }}"</p>
+                    <h6 class="mb-0">{{ t.name }}</h6>
+                    <small class="text-muted">{{ t.location }}</small>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center text-muted">Testimonials coming soon.</div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="section-py">
+    <div class="container">
+        <div class="cta-section text-center" data-aos="zoom-in">
+            <h2 class="mb-3">Ready to Plan Your Next Trip?</h2>
+            <p class="mb-4" style="color:#cbd5e1;">Message us on WhatsApp and let's plan your perfect getaway.</p>
+            <a href="https://wa.me/{{ SITE_WHATSAPP }}?text=Hello%20Sivasakthi%20Holidays%2C%20I%20would%20like%20to%20plan%20a%20trip." target="_blank" rel="noopener" class="btn btn-orange btn-lg px-5">
+                <i class="bi bi-whatsapp me-2"></i>Chat With Us
+            </a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

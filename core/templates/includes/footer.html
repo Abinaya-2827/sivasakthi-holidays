@@ -1,0 +1,46 @@
+<footer class="site-footer">
+    <div class="container">
+        <div class="row gy-4">
+            <div class="col-lg-4">
+                <h6 class="brand-font" style="font-size:1.3rem;">SIVASAKTHI <span style="color:var(--orange);">HOLIDAYS</span></h6>
+                <p>Madurai's trusted travel partner for family, college, corporate, temple and honeymoon tours across South India.</p>
+                <div class="social-icons mt-3">
+                    <a href="https://wa.me/{{ SITE_WHATSAPP }}" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="bi bi-whatsapp"></i></a>
+                    <a href="{{ SITE_INSTAGRAM }}" target="_blank" rel="noopener" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+                    <a href="tel:+91{{ SITE_PHONE }}" aria-label="Call"><i class="bi bi-telephone"></i></a>
+                    <a href="mailto:{{ SITE_EMAIL }}" aria-label="Email"><i class="bi bi-envelope"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-2 col-6">
+                <h6>Quick Links</h6>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="{% url 'home' %}">Home</a></li>
+                    <li class="mb-2"><a href="{% url 'about' %}">About Us</a></li>
+                    <li class="mb-2"><a href="{% url 'destination_list' %}">Destinations</a></li>
+                    <li class="mb-2"><a href="{% url 'package_list' %}">Packages</a></li>
+                    <li class="mb-2"><a href="{% url 'gallery' %}">Gallery</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-2 col-6">
+                <h6>Company</h6>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="{% url 'payment' %}">Payment</a></li>
+                    <li class="mb-2"><a href="{% url 'contact' %}">Contact</a></li>
+                    <li class="mb-2"><a href="{% url 'login' %}">Login</a></li>
+                    <li class="mb-2"><a href="{% url 'register' %}">Register</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-4">
+                <h6>Contact</h6>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><i class="bi bi-geo-alt me-2"></i>{{ SITE_ADDRESS }}</li>
+                    <li class="mb-2"><i class="bi bi-telephone me-2"></i><a href="tel:+91{{ SITE_PHONE }}">{{ SITE_PHONE }}</a></li>
+                    <li class="mb-2"><i class="bi bi-envelope me-2"></i><a href="mailto:{{ SITE_EMAIL }}">{{ SITE_EMAIL }}</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom text-center">
+            &copy; {% now "Y" %} {{ SITE_NAME }}. All rights reserved.
+        </div>
+    </div>
+</footer>

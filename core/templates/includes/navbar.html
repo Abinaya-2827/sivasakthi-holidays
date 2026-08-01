@@ -1,0 +1,27 @@
+<nav class="navbar navbar-expand-lg navbar-sh sticky-top">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'home' %}">SIVASAKTHI<span> HOLIDAYS</span></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNav">
+            <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+                <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'destination_list' %}">Destinations</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'package_list' %}">Packages</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'gallery' %}">Gallery</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'payment' %}">Payment</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
+                {% if user.is_authenticated %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+                {% else %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+                <li class="nav-item ms-lg-2">
+                    <a class="btn btn-orange btn-sm px-3" href="{% url 'register' %}">Register</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>

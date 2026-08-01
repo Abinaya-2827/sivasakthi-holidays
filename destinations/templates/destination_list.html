@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Destinations — {{ SITE_NAME }}{% endblock %}
+{% block content %}
+
+<section class="section-py">
+    <div class="container">
+        <div class="text-center mb-4">
+            <div class="section-eyebrow">Explore</div>
+            <h2 class="section-title">Our Destinations</h2>
+            <p class="section-subtitle">From misty hills to golden beaches and sacred temples</p>
+        </div>
+
+        <form method="GET" class="mx-auto mb-5" style="max-width:480px;">
+            <div class="input-group">
+                <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="Search destinations...">
+                <button class="btn btn-orange" type="submit"><i class="bi bi-search"></i></button>
+            </div>
+        </form>
+
+        <div class="row g-4 dest-grid">
+            {% for d in destinations %}
+            {% if d.image %}
+            <div class="col-12 col-md-6 col-lg-3 d-flex" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:'30' }}">
+                <div class="dest-card">
+                    <div class="dest-card-media">
+                        <img src="{{ d.image.url }}" alt="{{ d.name }}" loading="lazy" onload="this.classList.add('is-loaded')">
+                        <div class="dest-card-gradient"></div>
+                        <h3 class="dest-card-name">{{ d.name }}</h3>
+                    </div>
+                    <div class="dest-card-body">
+                        <p class="dest-card-desc">{{ d.short_description }}</p>
+                        <div class="dest-card-actions">
+                            <a href="{% url 'destination_detail' d.slug %}" class="btn btn-outline-orange btn-sm flex-fill">Explore</a>
+                            <a href="https://wa.me/{{ SITE_WHATSAPP }}?text=Hello%20Sivasakthi%20Holidays%2C%20I%20would%20like%20to%20book%20a%20trip%20to%20{{ d.name|urlencode }}.%20Please%20share%20the%20details."
+                               target="_blank" rel="noopener" class="btn btn-orange btn-sm flex-fill">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% empty %}
+            <div class="col-12 text-center text-muted py-5">
+                No destinations found{% if query %} for "{{ query }}"{% endif %}. Add destinations from the admin panel.
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% endblock %}
