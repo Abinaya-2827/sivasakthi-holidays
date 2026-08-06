@@ -1,5 +1,5 @@
-{% load static %}
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Gallery — {{ SITE_NAME }}{% endblock %}
 {% block content %}
 
@@ -17,7 +17,7 @@
             <div class="col-12 col-md-6 col-lg-4 gallery-col" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:'30' }}">
                 <div class="album-card">
                     <div class="album-card-media">
-                        <img src="{% static 'images/gallery/' %}{{ album.cover.image.name|cut:'gallery/' }}"
+                      <img src="{{ album.cover.image.url }}"
      alt="{{ album.name }}"
      loading="lazy">
                         <span class="album-card-count">{{ album.count }} Photo{{ album.count|pluralize }}</span>
@@ -62,58 +62,108 @@
 {% block extra_js %}
 <script>
 document.addEventListener("DOMContentLoaded", function () {
+
     const lightbox = document.getElementById("galleryLightbox");
     if (!lightbox) return;
 
-    // Each album's photo URLs + name, built server-side once, read client-side.
+
     const albums = [
-      {% for photo in album.photos %}"{% static 'images/gallery/' %}{{ photo.image.name|cut:'gallery/'|escapejs }}"{% if not forloop.last %}, {% endif %}{% endfor %}
+    {% for album in albums %}
+    {
+        name: "{{ album.name|escapejs }}",
+        photos: [
+            {% for photo in album.photos %}
+            "{{ photo.image.url|escapejs }}"
+            {% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ]
+    }
+    {% if not forloop.last %},{% endif %}
+    {% endfor %}
+    ];
+
+
     let currentAlbum = 0;
     let currentPhoto = 0;
 
+
     function show() {
+
         const album = albums[currentAlbum];
+
         if (!album) return;
-        document.getElementById("lightboxImage").src = album.photos[currentPhoto];
-        document.getElementById("lightboxCaption").textContent = album.name;
+
+
+        document.getElementById("lightboxImage").src =
+            album.photos[currentPhoto];
+
+
+        document.getElementById("lightboxCaption").textContent =
+            album.name;
+
+
         document.getElementById("lightboxCounter").textContent =
-            album.photos.length > 1 ? `Photo ${currentPhoto + 1} of ${album.photos.length}` : "";
+            album.photos.length > 1
+            ? `Photo ${currentPhoto + 1} of ${album.photos.length}`
+            : "";
+
+
         const multi = album.photos.length > 1;
-        document.getElementById("lightboxPrev").style.display = multi ? "flex" : "none";
-        document.getElementById("lightboxNext").style.display = multi ? "flex" : "none";
+
+        document.getElementById("lightboxPrev").style.display =
+            multi ? "flex" : "none";
+
+        document.getElementById("lightboxNext").style.display =
+            multi ? "flex" : "none";
+
     }
 
-    lightbox.addEventListener("show.bs.modal", function (event) {
+
+
+    lightbox.addEventListener("show.bs.modal", function(event){
+
         const trigger = event.relatedTarget;
-        currentAlbum = parseInt(trigger.getAttribute("data-album-index"), 10) || 0;
+
+        currentAlbum =
+        parseInt(trigger.getAttribute("data-album-index"),10) || 0;
+
         currentPhoto = 0;
+
         show();
+
     });
 
-    document.getElementById("lightboxPrev").addEventListener("click", function () {
-        const total = albums[currentAlbum].photos.length;
-        currentPhoto = (currentPhoto - 1 + total) % total;
+
+
+    document.getElementById("lightboxPrev")
+    .addEventListener("click", function(){
+
+        const total =
+        albums[currentAlbum].photos.length;
+
+        currentPhoto =
+        (currentPhoto - 1 + total) % total;
+
         show();
-    });
-    document.getElementById("lightboxNext").addEventListener("click", function () {
-        const total = albums[currentAlbum].photos.length;
-        currentPhoto = (currentPhoto + 1) % total;
-        show();
+
     });
 
-    // Left/Right arrow keys navigate while the lightbox is open.
-    // (Escape-to-close is already handled by Bootstrap's modal default.)
-    lightbox.addEventListener("keydown", function (event) {
-        const total = albums[currentAlbum] ? albums[currentAlbum].photos.length : 0;
-        if (total <= 1) return;
-        if (event.key === "ArrowLeft") {
-            currentPhoto = (currentPhoto - 1 + total) % total;
-            show();
-        } else if (event.key === "ArrowRight") {
-            currentPhoto = (currentPhoto + 1) % total;
-            show();
-        }
+
+
+    document.getElementById("lightboxNext")
+    .addEventListener("click", function(){
+
+        const total =
+        albums[currentAlbum].photos.length;
+
+        currentPhoto =
+        (currentPhoto + 1) % total;
+
+        show();
+
     });
+
+
 });
 </script>
 {% endblock %}
