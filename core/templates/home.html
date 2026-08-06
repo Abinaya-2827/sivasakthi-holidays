@@ -14,8 +14,7 @@
     <div class="carousel-inner">
         {% for slide in hero_slides %}
         <div class="carousel-item {% if forloop.first %}active{% endif %}">
-            <div class="hero-slide d-flex align-items-end" style="background-image:url('{{ slide.image.url }}');">
-                <div class="container hero-caption pb-5">
+            <div class="hero-slide d-flex align-items-end" style="background-image:url('{% static "images/hero/" %}{{ slide.image.name|cut:"hero/" }}');"
                     <h1 class="mb-3" data-aos="fade-up">{{ slide.title }}</h1>
                     <p data-aos="fade-up" data-aos-delay="100">{{ slide.subtitle }}</p>
                     <a href="{% url 'destination_list' %}" class="btn btn-orange btn-lg mt-3 px-4" data-aos="fade-up" data-aos-delay="200">Explore Destinations</a>
@@ -101,7 +100,8 @@
             {% for d in popular_destinations %}
             <div class="col-sm-6 col-lg-3" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:'50' }}">
                 <div class="card card-hover h-100">
-                    <img src="{{ d.image.url }}" alt="{{ d.name }}">
+                   <img src="{% static 'images/destinations/' %}{{ d.image.name|cut:'destinations/' }}"
+     alt="{{ d.name }}">
                     <div class="card-body-sh">
                         <h5>{{ d.name }}</h5>
                         <p class="text-muted small mb-3">{{ d.short_description }}</p>
@@ -131,7 +131,8 @@
             {% for img in gallery_preview %}
             <div class="col-6 col-lg-3" data-aos="zoom-in">
                 <div class="gallery-item">
-                    <img src="{{ img.image.url }}" alt="{{ img.caption }}">
+                  <img src="{% static 'images/gallery/' %}{{ img.image.name|cut:'gallery/' }}"
+     alt="{{ img.caption }}">
                     <div class="gallery-overlay">{{ img.caption }}</div>
                 </div>
             </div>

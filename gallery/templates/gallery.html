@@ -1,3 +1,4 @@
+{% load static %}
 {% extends 'base.html' %}
 {% block title %}Gallery — {{ SITE_NAME }}{% endblock %}
 {% block content %}
@@ -16,7 +17,9 @@
             <div class="col-12 col-md-6 col-lg-4 gallery-col" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:'30' }}">
                 <div class="album-card">
                     <div class="album-card-media">
-                        <img src="{{ album.cover.image.url }}" alt="{{ album.name }}" loading="lazy">
+                        <img src="{% static 'images/gallery/' %}{{ album.cover.image.name|cut:'gallery/' }}"
+     alt="{{ album.name }}"
+     loading="lazy">
                         <span class="album-card-count">{{ album.count }} Photo{{ album.count|pluralize }}</span>
                     </div>
                     <div class="album-card-body">
@@ -64,16 +67,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Each album's photo URLs + name, built server-side once, read client-side.
     const albums = [
-        {% for album in albums %}
-        {
-            name: "{{ album.name|escapejs }}",
-            photos: [
-                {% for photo in album.photos %}"{{ photo.image.url|escapejs }}"{% if not forloop.last %}, {% endif %}{% endfor %}
-            ]
-        }{% if not forloop.last %},{% endif %}
-        {% endfor %}
-    ];
-
+      {% for photo in album.photos %}"{% static 'images/gallery/' %}{{ photo.image.name|cut:'gallery/'|escapejs }}"{% if not forloop.last %}, {% endif %}{% endfor %}
     let currentAlbum = 0;
     let currentPhoto = 0;
 

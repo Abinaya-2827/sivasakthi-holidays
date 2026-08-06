@@ -1,3 +1,4 @@
+{% load static %}
 {% extends 'base.html' %}
 {% block title %}Destinations — {{ SITE_NAME }}{% endblock %}
 {% block content %}
@@ -23,7 +24,7 @@
                                                                                                                                                                             <div class="col-12 col-md-6 col-lg-3 d-flex" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:'30' }}">
                                                                                                                                                                                             <div class="dest-card">
                                                                                                                                                                                                                 <div class="dest-card-media">
-                                                                                                                                                                                                                                        <img src="{{ d.image.url }}" alt="{{ d.name }}" loading="lazy" onload="this.classList.add('is-loaded')">
+                                                                                                                                                                                                                                      <img src="{% static 'images/destinations/' %}{{ d.image.name|cut:'destinations/' }}" alt="{{ d.name }}" loading="lazy" onload="this.classList.add('is-loaded')">
                                                                                                                                                                                                                                                                 <div class="dest-card-gradient"></div>
                                                                                                                                                                                                                                                                                         <h3 class="dest-card-name">{{ d.name }}</h3>
                                                                                                                                                                                                                                                                                                             </div>

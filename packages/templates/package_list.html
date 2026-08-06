@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Tour Packages — {{ SITE_NAME }}{% endblock %}
 {% block content %}
 
@@ -22,7 +23,9 @@
             <div class="col-12 col-md-6 col-lg-4 pkg-col" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:'30' }}">
                 <div class="pkg-card">
                     <div class="pkg-card-media">
-                        <img src="{{ p.image.url }}" alt="{{ p.tour_type }}" loading="lazy">
+                       <img src="{% static 'images/packages/' %}{{ p.image.name|cut:'packages/' }}"
+     alt="{{ p.tour_type }}"
+     loading="lazy">
                         <span class="pkg-card-badge"><i class="bi {{ p.icon }}"></i>{{ p.tour_type }}</span>
                     </div>
                     <div class="pkg-card-body">
@@ -105,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
             type: "{{ p.tour_type|escapejs }}",
             title: "{{ p.destination_text|escapejs }}",
             desc: "{{ p.description|escapejs }}",
-            image: "{{ p.image.url|escapejs }}",
+           image: "{% static 'images/packages/' %}{{ p.image.name|cut:'packages/'|escapejs }}",
             duration: "{{ p.duration|escapejs }}",
             tags: [{% for d in p.popular_destinations_list %}"{{ d|escapejs }}"{% if not forloop.last %}, {% endif %}{% endfor %}],
             facilities: [{% for f in p.facilities_list %}"{{ f|escapejs }}"{% if not forloop.last %}, {% endif %}{% endfor %}],
