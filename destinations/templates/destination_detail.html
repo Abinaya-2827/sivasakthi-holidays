@@ -7,8 +7,9 @@
     <div class="container">
         <div class="row g-4">
             <div class="col-lg-7" data-aos="fade-right">
-               <img src="{% static 'images/destinations/' %}{{ destination.image.name|cut:'destinations/' }}"
-     alt="{{ destination.name }}">
+              <img src="{% static 'images/destinations/' %}{{ destination.image.name|cut:'destinations/' }}"
+     alt="{{ destination.name }}"
+     class="img-fluid">
             </div>
             <div class="col-lg-5" data-aos="fade-left">
                 <div class="section-eyebrow">Destination</div>
