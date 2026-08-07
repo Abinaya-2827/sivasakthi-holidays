@@ -1,28 +1,58 @@
-{% load static %}
 {% extends 'base.html' %}
+{% load static %}
+
 {% block title %}{{ destination.name }} — {{ SITE_NAME }}{% endblock %}
+
 {% block content %}
 
 <section class="section-py">
     <div class="container">
+
         <div class="row g-4">
-            <div class="col-lg-7" data-aos="fade-right">
-              <img src="{% static 'images/destinations/' %}{{ destination.image.name|cut:'destinations/' }}"
-     alt="{{ destination.name }}"
-     class="img-fluid">
+
+            <div class="col-lg-7">
+
+                <img
+                    src="{% static 'images/destinations/' %}{{ destination.image.name|cut:'destinations/' }}"
+                    class="img-fluid rounded shadow"
+                    alt="{{ destination.name }}"
+                >
+
             </div>
-            <div class="col-lg-5" data-aos="fade-left">
-                <div class="section-eyebrow">Destination</div>
-                <h2 class="section-title">{{ destination.name }}</h2>
-                <p class="text-muted">{{ destination.description|default:destination.short_description }}</p>
-                <a href="https://wa.me/{{ SITE_WHATSAPP }}?text={{ destination.whatsapp_message|urlencode }}" target="_blank" rel="noopener" class="btn btn-orange btn-lg px-4 mt-2">
-                    <i class="bi bi-whatsapp me-2"></i>Book Now
-                </a>
-                <div class="mt-4">
-                    <a href="{% url 'destination_list' %}"><i class="bi bi-arrow-left me-1"></i>Back to all destinations</a>
+
+            <div class="col-lg-5">
+
+                <div class="section-eyebrow">
+                    Destination
                 </div>
+
+                <h2 class="section-title">
+                    {{ destination.name }}
+                </h2>
+
+                <p class="text-muted">
+                    {{ destination.description|default:destination.short_description }}
+                </p>
+
+                <a
+                    href="https://wa.me/{{ SITE_WHATSAPP }}?text=Hello%20Sivasakthi%20Holidays,%20I%20would%20like%20to%20book%20{{ destination.name|urlencode }}"
+                    target="_blank"
+                    class="btn btn-orange"
+                >
+                    Book Now
+                </a>
+
+                <a
+                    href="{% url 'destination_list' %}"
+                    class="btn btn-outline-orange ms-2"
+                >
+                    Back
+                </a>
+
             </div>
+
         </div>
+
     </div>
 </section>
 
