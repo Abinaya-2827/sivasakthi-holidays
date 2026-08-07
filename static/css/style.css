@@ -610,3 +610,41 @@ footer.site-footer .social-icons a:hover { background: var(--orange); }
 @media (max-width: 767px) {
   .pkg-card-media { height: 190px; flex-basis: 190px; }
 }
+.hero-slide{
+    position:relative;
+    height:88vh;
+    min-height:500px;
+    background-size:cover;
+    background-position:center;
+}
+
+.hero-slide::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:rgba(11,37,69,.45);
+}
+
+.hero-caption{
+    position:relative;
+    z-index:10;
+    color:#fff;
+    padding-bottom:60px;
+}
+
+.hero-caption h1{
+    color:#fff;
+    font-size:clamp(2rem,5vw,3.8rem);
+    font-weight:700;
+}
+
+.hero-caption p{
+    color:#fff;
+    font-size:1.15rem;
+    max-width:600px;
+}
+
+.hero-caption .btn{
+    position:relative;
+    z-index:20;
+}

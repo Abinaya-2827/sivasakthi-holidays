@@ -6,31 +6,90 @@
 
 <!-- Hero Slider -->
 <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+
     <div class="carousel-indicators">
         {% for slide in hero_slides %}
-        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %}active{% endif %}"></button>
+        <button type="button"
+                data-bs-target="#heroCarousel"
+                data-bs-slide-to="{{ forloop.counter0 }}"
+                class="{% if forloop.first %}active{% endif %}">
+        </button>
         {% endfor %}
     </div>
+
     <div class="carousel-inner">
+
         {% for slide in hero_slides %}
+
         <div class="carousel-item {% if forloop.first %}active{% endif %}">
-            <div class="hero-slide d-flex align-items-end" style="background-image:url('{% static "images/hero/" %}{{ slide.image.name|cut:"hero/" }}');"
-                    <h1 class="mb-3" data-aos="fade-up">{{ slide.title }}</h1>
-                    <p data-aos="fade-up" data-aos-delay="100">{{ slide.subtitle }}</p>
-                    <a href="{% url 'destination_list' %}" class="btn btn-orange btn-lg mt-3 px-4" data-aos="fade-up" data-aos-delay="200">Explore Destinations</a>
-                </div>
-            </div>
-        </div>
-        {% empty %}
-        <div class="carousel-item active">
-            <div class="hero-slide d-flex align-items-end" style="background-image:url('{% static 'images/hero-placeholder.jpg' %}');">
+
+            <div class="hero-slide d-flex align-items-end"
+                 style="background-image:url('{% static 'images/hero/' %}{{ slide.image.name|cut:'hero/' }}');">
+
                 <div class="container hero-caption pb-5">
-                    <h1 class="mb-3">Your Journey, Our Promise</h1>
-                    <p>Premium bus travel and holiday packages across South India.</p>
-                    <a href="{% url 'destination_list' %}" class="btn btn-orange btn-lg mt-3 px-4">Explore Destinations</a>
+
+                    <h1 class="mb-3" data-aos="fade-up">
+                        {{ slide.title }}
+                    </h1>
+
+                    <p data-aos="fade-up" data-aos-delay="100">
+                        {{ slide.subtitle }}
+                    </p>
+
+                    <a href="{% url 'destination_list' %}"
+                       class="btn btn-orange btn-lg mt-3 px-4"
+                       data-aos="fade-up"
+                       data-aos-delay="200">
+                        Explore Destinations
+                    </a>
+
                 </div>
+
             </div>
+
         </div>
+
+        {% empty %}
+
+        <div class="carousel-item active">
+
+            <div class="hero-slide d-flex align-items-end"
+                 style="background-image:url('{% static 'images/hero-placeholder.jpg' %}');">
+
+                <div class="container hero-caption pb-5">
+
+                    <h1 class="mb-3">
+                        Your Journey, Our Promise
+                    </h1>
+
+                    <p>
+                        Premium bus travel and holiday packages across South India.
+                    </p>
+
+                    <a href="{% url 'destination_list' %}"
+                       class="btn btn-orange btn-lg mt-3 px-4">
+                        Explore Destinations
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+    </button>
+
+    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+    </button>
+
+</div>
         {% endfor %}
     </div>
     <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
