@@ -1,83 +1,75 @@
-{% load static %}
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Destinations — {{ SITE_NAME }}{% endblock %}
 
 {% block content %}
 
 <section class="section-py">
-    <div class="container">
+<div class="container">
 
-        <div class="text-center mb-4">
-            <div class="section-eyebrow">Explore</div>
-            <h2 class="section-title">Our Destinations</h2>
-            <p class="section-subtitle">
-                From misty hills to golden beaches and sacred temples
-            </p>
+    <div class="text-center mb-4">
+        <div class="section-eyebrow">Explore</div>
+        <h2 class="section-title">Our Destinations</h2>
+        <p class="section-subtitle">
+            From misty hills to golden beaches and sacred temples
+        </p>
+    </div>
+
+    <form method="GET" class="mx-auto mb-5" style="max-width:480px;">
+        <div class="input-group">
+            <input
+                type="text"
+                name="q"
+                value="{{ query }}"
+                class="form-control"
+                placeholder="Search destinations..."
+            >
+            <button class="btn btn-orange" type="submit">
+                <i class="bi bi-search"></i>
+            </button>
         </div>
+    </form>
 
-        <form method="GET" class="mx-auto mb-5" style="max-width:480px;">
-            <div class="input-group">
-                <input
-                    type="text"
-                    name="q"
-                    value="{{ query }}"
-                    class="form-control"
-                    placeholder="Search destinations..."
-                >
-                <button class="btn btn-orange" type="submit">
-                    <i class="bi bi-search"></i>
-                </button>
-            </div>
-        </form>
+    <div class="row g-4 dest-grid">
 
-        <div class="row g-4 dest-grid">
+        {% for d in destinations %}
 
-            {% for d in destinations %}
-            {% if d.image %}
+        <div class="col-12 col-md-6 col-lg-3 d-flex">
 
-            <div class="col-12 col-md-6 col-lg-3 d-flex"
-                 data-aos="fade-up"
-                 data-aos-delay="{{ forloop.counter0|add:'30' }}">
+            <div class="dest-card w-100">
 
-                <div class="dest-card w-100">
+                <div class="dest-card-media">
 
-                    <div class="dest-card-media">
+                    <img src="{% static 'images/destinations/' %}{{ d.image.name|cut:'destinations/' }}"
+     alt="{{ d.name }}"
+     loading="lazy"
+     class="img-fluid">
 
-                        <img src="{% static 'images/destinations/' %}{{ d.image.name|cut:'destinations/' }}"
-                             alt="{{ d.name }}"
-                             loading="lazy"
-                             class="img-fluid">
+                    <div class="dest-card-gradient"></div>
 
-                        <div class="dest-card-gradient"></div>
+                    <h3 class="dest-card-name">{{ d.name }}</h3>
 
-                        <h3 class="dest-card-name">
-                            {{ d.name }}
-                        </h3>
+                </div>
 
-                    </div>
+                <div class="dest-card-body">
 
-                    <div class="dest-card-body">
+                    <p class="dest-card-desc">
+                        {{ d.short_description }}
+                    </p>
 
-                        <p class="dest-card-desc">
-                            {{ d.short_description }}
-                        </p>
+                    <div class="dest-card-actions">
 
-                        <div class="dest-card-actions">
+                        <a href="{% url 'destination_detail' d.slug %}"
+                           class="btn btn-outline-orange btn-sm flex-fill">
+                            Explore
+                        </a>
 
-                            <a href="{% url 'destination_detail' d.slug %}"
-                               class="btn btn-outline-orange btn-sm flex-fill">
-                                Explore
-                            </a>
-
-                            <a href="https://wa.me/{{ SITE_WHATSAPP }}?text=Hello%20Sivasakthi%20Holidays,%20I%20would%20like%20to%20book%20a%20trip%20to%20{{ d.name|urlencode }}."
-                               target="_blank"
-                               rel="noopener"
-                               class="btn btn-orange btn-sm flex-fill">
-                                Book Now
-                            </a>
-
-                        </div>
+                        <a href="https://wa.me/{{ SITE_WHATSAPP }}?text=Hello%20Sivasakthi%20Holidays,%20I%20would%20like%20to%20book%20a%20trip%20to%20{{ d.name|urlencode }}."
+                           target="_blank"
+                           class="btn btn-orange btn-sm flex-fill">
+                            Book Now
+                        </a>
 
                     </div>
 
@@ -85,18 +77,19 @@
 
             </div>
 
-            {% endif %}
-            {% empty %}
-
-            <div class="col-12 text-center text-muted py-5">
-                No destinations found{% if query %} for "{{ query }}"{% endif %}.
-            </div>
-
-            {% endfor %}
-
         </div>
 
+        {% empty %}
+
+        <div class="col-12 text-center py-5">
+            No destinations found.
+        </div>
+
+        {% endfor %}
+
     </div>
+
+</div>
 </section>
 
 {% endblock %}
