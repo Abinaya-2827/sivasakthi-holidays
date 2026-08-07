@@ -44,12 +44,10 @@
 
                     <div class="dest-card-media">
 
-                        <img
-                            src="{% static 'images/destinations/' %}{{ d.image.name|cut:'destinations/' }}"
-                            alt="{{ d.name }}"
-                            loading="lazy"
-                            onload="this.classList.add('is-loaded')"
-                        >
+                        <img src="{% static 'images/destinations/' %}{{ d.image.name|cut:'destinations/' }}"
+                             alt="{{ d.name }}"
+                             loading="lazy"
+                             class="img-fluid">
 
                         <div class="dest-card-gradient"></div>
 
@@ -92,7 +90,6 @@
 
             <div class="col-12 text-center text-muted py-5">
                 No destinations found{% if query %} for "{{ query }}"{% endif %}.
-                Add destinations from the admin panel.
             </div>
 
             {% endfor %}
