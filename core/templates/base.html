@@ -15,6 +15,24 @@
     <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     {% block extra_head %}{% endblock %}
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TravelAgency",
+  "name": "Sivasakthi Holidays",
+  "url": "https://sivasakthiholidays.in/",
+  "telephone": "+91{{ SITE_PHONE }}",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "{{ SITE_ADDRESS }}",
+    "addressLocality": "Madurai",
+    "addressRegion": "Tamil Nadu",
+    "postalCode": "625016",
+    "addressCountry": "IN"
+  },
+  "description": "Sivasakthi Holidays is a travel agency in Madurai offering domestic and international tour packages, family tours, college tours, group tours, corporate trips, temple tours and customized travel packages."
+}
+</script>
 </head>
 <body>
 
