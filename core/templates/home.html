@@ -118,7 +118,11 @@
     <div class="container text-center">
         <div class="section-eyebrow">Why Sivasakthi Holidays</div>
         <h2 class="section-title">Why Choose Us</h2>
-        <p class="section-subtitle">What makes every trip with us different</p>
+        <p class="section-subtitle">
+    Sivasakthi Holidays Madurai is a trusted travel service offering
+    family tours, college tours, group tours, temple tours and customized
+    travel packages across South India.
+</p>
         <div class="row g-4">
             {% for item in why_choose_us %}
             <div class="col-md-4 col-lg-3" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:'50' }}">
@@ -155,8 +159,10 @@
             {% for d in popular_destinations %}
             <div class="col-sm-6 col-lg-3" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:'50' }}">
                 <div class="card card-hover h-100">
-                   <img src="{% static 'images/destinations/' %}{{ d.image.name|cut:'destinations/' }}"
-     alt="{{ d.name }}">
+                   <img
+    src="{% static 'images/destinations/' %}{{ d.image.name|cut:'destinations/' }}"
+    alt="{{ d.name }} - Sivasakthi Holidays Madurai"
+>
                     <div class="card-body-sh">
                         <h5>{{ d.name }}</h5>
                         <p class="text-muted small mb-3">{{ d.short_description }}</p>
@@ -169,7 +175,9 @@
             {% endfor %}
         </div>
         <div class="text-center mt-4">
-            <a href="{% url 'destination_list' %}" class="btn btn-outline-navy px-4">View All Destinations</a>
+           <a href="{% url 'destination_list' %}" class="btn btn-outline-navy px-4">
+    Explore All Destinations
+</a>
         </div>
     </div>
 </section>
