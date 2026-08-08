@@ -8,23 +8,34 @@
 <section class="section-py">
     <div class="container">
 
+        <!-- Page Heading -->
         <div class="text-center mb-5">
             <div class="section-eyebrow">Memories</div>
-            <h2 class="section-title">Trip Gallery</h2>
+
+            <h2 class="section-title">
+                Trip Gallery
+            </h2>
+
             <p class="section-subtitle">
                 Real photos from our travellers' journeys
             </p>
         </div>
 
+
         {% if albums %}
+
+        <!-- Album Cards -->
         <div class="row g-4 album-grid">
 
             {% for album in albums %}
-            <div class="col-12 col-md-6 col-lg-4">
+
+            <div class="col-12 col-md-6 col-lg-4 gallery-col">
 
                 <div class="album-card">
 
+                    <!-- Cover Image -->
                     <div class="album-card-media">
+
                         <img
                             src="{% static 'images/gallery/' %}{{ album.cover.image.name|cut:'gallery/' }}"
                             alt="{{ album.name }}"
@@ -32,11 +43,16 @@
                         >
 
                         <span class="album-card-count">
-                            {{ album.count }} Photo{{ album.count|pluralize }}
+                            {{ album.count }}
+                            Photo{{ album.count|pluralize }}
                         </span>
+
                     </div>
 
+
+                    <!-- Album Details -->
                     <div class="album-card-body">
+
                         <h3 class="album-card-title">
                             {{ album.name }}
                         </h3>
@@ -45,9 +61,15 @@
                             {{ album.description }}
                         </p>
 
+
+                        <!-- VIEW GALLERY BUTTON -->
                         <button
-                            class="btn btn-orange btn-sm w-100"
-                            type="button">
+                            type="button"
+                            class="btn btn-orange btn-sm w-100 album-view-btn"
+                            data-bs-toggle="modal"
+                            data-bs-target="#albumModal{{ forloop.counter }}"
+                        >
+                            <i class="bi bi-images me-2"></i>
                             View Gallery
                         </button>
 
@@ -56,14 +78,124 @@
                 </div>
 
             </div>
+
+
+            <!-- ==================================================
+                 MODAL FOR THIS ALBUM
+                 ================================================== -->
+
+            <div
+                class="modal fade"
+                id="albumModal{{ forloop.counter }}"
+                tabindex="-1"
+                aria-labelledby="albumModalLabel{{ forloop.counter }}"
+                aria-hidden="true"
+            >
+
+                <div class="modal-dialog modal-xl modal-dialog-centered">
+
+                    <div class="modal-content lightbox-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header border-0">
+
+                            <div>
+                                <h4
+                                    class="modal-title text-white"
+                                    id="albumModalLabel{{ forloop.counter }}"
+                                >
+                                    {{ album.name }}
+                                </h4>
+
+                                <small class="text-secondary">
+                                    {{ album.count }}
+                                    Photo{{ album.count|pluralize }}
+                                </small>
+                            </div>
+
+                            <button
+                                type="button"
+                                class="btn-close btn-close-white"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                            ></button>
+
+                        </div>
+
+
+                        <!-- Modal Body -->
+                        <div class="modal-body">
+
+                            <div class="row g-3">
+
+                                {% for photo in album.photos %}
+
+                                <div class="col-6 col-md-4 col-lg-3">
+
+                                    <div class="gallery-item">
+
+                                        <img
+                                            src="{% static 'images/gallery/' %}{{ photo.image.name|cut:'gallery/' }}"
+                                            alt="{{ photo.caption|default:album.name }}"
+                                            loading="lazy"
+                                        >
+
+                                        {% if photo.caption %}
+                                        <div class="gallery-overlay">
+                                            {{ photo.caption }}
+                                        </div>
+                                        {% endif %}
+
+                                    </div>
+
+                                </div>
+
+                                {% endfor %}
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Modal Footer -->
+                        <div class="modal-footer border-0">
+
+                            <button
+                                type="button"
+                                class="btn btn-orange"
+                                data-bs-dismiss="modal"
+                            >
+                                Close Gallery
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
             {% endfor %}
 
         </div>
 
+
         {% else %}
 
+        <!-- No Photos -->
         <div class="text-center text-muted py-5">
-            No photos yet — add them from the admin panel.
+
+            <i class="bi bi-images fs-1"></i>
+
+            <h4 class="mt-3">
+                No photos yet
+            </h4>
+
+            <p>
+                Add gallery photos from the admin panel.
+            </p>
+
         </div>
 
         {% endif %}
