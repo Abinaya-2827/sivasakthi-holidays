@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 
@@ -22,6 +23,7 @@ def home(request):
         "gallery_preview": GalleryImage.objects.all()[:8],
         "testimonials": Testimonial.objects.filter(is_active=True)[:6],
     }
+
     return render(request, "home.html", context)
 
 
@@ -36,15 +38,20 @@ def about(request):
         ("bi-person-badge", "Experienced Drivers", "Skilled, road-tested drivers who know every route."),
         ("bi-truck", "Comfortable Buses", "Well-maintained coaches built for long, smooth journeys."),
     ]
+
     return render(request, "about.html", {"about_points": about_points})
 
 
 def contact(request):
     if request.method == "POST":
         form = ContactForm(request.POST)
+
         if form.is_valid():
             form.save()
-            messages.success(request, "Thanks for reaching out! We'll get back to you shortly.")
+            messages.success(
+                request,
+                "Thanks for reaching out! We'll get back to you shortly."
+            )
             return redirect("contact")
     else:
         form = ContactForm()
@@ -55,11 +62,28 @@ def contact(request):
 def payment(request):
     if request.method == "POST":
         form = PaymentProofForm(request.POST, request.FILES)
+
         if form.is_valid():
             form.save()
-            messages.success(request, "Payment screenshot received. We'll confirm your booking shortly.")
+            messages.success(
+                request,
+                "Payment screenshot received. We'll confirm your booking shortly."
+            )
             return redirect("payment")
     else:
         form = PaymentProofForm()
 
     return render(request, "payment.html", {"form": form})
+
+
+def robots_txt(request):
+    content = """User-agent: *
+Allow: /
+
+Sitemap: https://sivasakthiholidays.in/sitemap.xml
+"""
+
+    return HttpResponse(
+        content,
+        content_type="text/plain"
+    )
